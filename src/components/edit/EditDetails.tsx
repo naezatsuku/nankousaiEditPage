@@ -721,7 +721,7 @@ const removeEventTime = (index: number) => {
                             )
                         })}
                     </div>
-                    <div className="flex gap-2 mt-4 ">
+                    <div className="block gap-2 mt-4 ">
                       <input
                         
                         type="text"
@@ -729,7 +729,7 @@ const removeEventTime = (index: number) => {
                         onChange={(e) => setNewTagName(e.target.value)}
                         onKeyDown={(e)=>e.key === "Enter" && handleAddCustomTag()}
                         placeholder="新しいタグ名"
-                        className="px-3 py-1 border border-teal-500 rounded-md outline-none focus:ring-2 focus:ring-cyan-400"
+                        className=" mr-2 px-3 py-1 border border-teal-500 rounded-md outline-none focus:ring-2 focus:ring-cyan-400"
                       />
                       <button
                         onClick={handleAddCustomTag}

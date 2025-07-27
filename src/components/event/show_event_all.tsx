@@ -348,10 +348,10 @@ export default function ShowEvent(
                 }
 
                 {selected_card.map((value:any, index:number) => (
-                    <motion.div  key={find_cardIndex(value)} className="w-full max-w-[92%] mx-auto h-[36vw] my-[4vw] lg:mt-10 bg-slate-100  flex justify-between p-[0.2vw] opacity-90 drop-shadow rounded-lg lg:w-[47%] lg:max-w-[580px] lg:h-auto lg:mx-0 lg:aspect-[2.4/1] lg:mb-4 lg:p-[1px]"
+                    <motion.div  key={find_cardIndex(value)} className="w-full  max-w-[92%] mx-auto h-[36vw] my-[4vw] lg:mt-10 bg-slate-100  flex justify-between p-[0.2vw] opacity-90 drop-shadow rounded-lg lg:w-[47%] lg:max-w-[580px] lg:h-auto lg:mx-0 lg:aspect-[2.4/1] lg:mb-4 lg:p-[1px]"
                     initial={{y:20, opacity:0}} animate={selected_card.includes(value)? {y:0, opacity:1} : {y:20, opacity:0}} transition={{ease:"easeOut", duration:0.4, delay:find_cardIndex(value) * 0.05}}>
                         <div className="w-full h-full rounded-md bg-white flex min-h-0">
-                            <div className="flex-none basis-[calc(63%-1vw)] px-[2vw] py-2  lg:pl-4 lg:pr-2  min-w-0  flex flex-col justify-around rounded-l-md">
+                            <div className="flex-none basis-[calc(63%-1.5vw)] px-[2vw] py-2  lg:pl-2 lg:pr-2  min-w-0  flex flex-col justify-around rounded-l-md">
                                 <Link href={{pathname:"/viewer/introduction", query:{name:value.className}}} className="">
                                     <p className={`${setTextColor(value.tags)} pl-[0.5vw] text-[2.5vw] lg:text-xs xl:text-lg lg:pl-0 font-normal`}>{value.className}</p>
                                 </Link>

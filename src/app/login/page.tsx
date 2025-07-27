@@ -4,7 +4,8 @@ import React from 'react'
 
 export default function page(){
   const handleLogin = async ()=>{
-    await supabase.auth.signInWithOAuth({"provider":"google",options:{redirectTo:`https://nankousai-edit-page.vercel.app/auth/callback`}})
+    const redirectUrl = window.location.origin
+    await supabase.auth.signInWithOAuth({"provider":"google",options:{redirectTo:`${redirectUrl}/auth/callback`}})
   }
   const checkSession=async()=>{
     const {data:session,error:err} = await supabase.auth.getSession(); 
