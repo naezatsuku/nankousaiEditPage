@@ -2,7 +2,7 @@
 import ShowDetails from "@/components/introduction/showDetails"
 import { useSearchParams } from "next/navigation"
 
-import { useEffect } from "react"
+import { Suspense, useEffect } from "react"
 import { useState } from "react"
 import BackTo from "@/components/global/back_button"
 import Loading from "@/components/global/parts/loading"
@@ -81,7 +81,8 @@ export default function Page() {
       };
 
     return(
-        <div className="h-screen bg-white">
+        <Suspense fallback={<Loading></Loading>}>
+            <div className="h-screen bg-white">
             {name?
             <div className="w-full">
                 <title>{name} | 第71回南高祭・展示の部2024</title>
@@ -103,5 +104,7 @@ export default function Page() {
             }
             
         </div>
+        </Suspense>
+        
     )
 }
