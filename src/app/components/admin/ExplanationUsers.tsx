@@ -19,7 +19,8 @@ const ExplanationUsers: React.FC = () => {
       >
         <p className="text-sm text-gray-600 ">
           ここでは生徒一覧の閲覧・生徒の削除ができます。ロールの変更は別ページです。<br></br>
-          ※スマホだと一覧のみ閲覧可能です。
+          ※スマホだと一覧のみ閲覧可能です。<br />
+          赤色は管理者権限有り。青色は編集者権限有り。
         </p>
       </div>
     </div>

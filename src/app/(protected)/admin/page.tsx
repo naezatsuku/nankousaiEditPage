@@ -64,12 +64,24 @@ const Page = () => {
           
         </div>
         <div className="group bg-gray-100 hover:bg-gray-200 rounded-xl shadow px-6 py-5 text-center transition-all duration-300 overflow-hidden w-full max-w-xl">
-          <Link href={{pathname:"/admin/users"}}>
+          <Link href={{pathname:"/admin/changeAdmin"}}>
           <p className="text-lg font-semibold text-gray-800">管理者の変更</p>
 
           <div className="mt-2 max-h-0 group-hover:max-h-32 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out overflow-hidden">
             <p className="text-sm text-gray-600">
               管理者の追加・変更・削除が可能です
+            </p>
+          </div>
+          </Link>  
+          
+        </div>
+        <div className="group bg-gray-100 hover:bg-gray-200 rounded-xl shadow px-6 py-5 text-center transition-all duration-300 overflow-hidden w-full max-w-xl">
+          <Link href={{pathname:"/admin/handleClass"}}>
+          <p className="text-lg font-semibold text-gray-800">展示の出店状況を編集</p>
+
+          <div className="mt-2 max-h-0 group-hover:max-h-32 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out overflow-hidden">
+            <p className="text-sm text-gray-600">
+              展示を新しく追加したり、展示を削除したりすることが可能です。
             </p>
           </div>
           </Link>  

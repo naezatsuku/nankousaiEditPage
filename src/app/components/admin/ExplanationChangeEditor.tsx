@@ -14,12 +14,20 @@ const ExplanationChangeEditors: React.FC = () => {
 
       <div
         className={`transition-all duration-300 ease-in-out overflow-hidden mt-2 ${
-          open ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+          open ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
         <p className="text-sm text-gray-600 ">
-          ここでは生徒一覧の閲覧・生徒の削除ができます。ロールの変更は別ページです。<br></br>
-          ※スマホだと一覧のみ閲覧可能です。
+          ここでは生徒の権限を変更できます。<br></br>
+          生徒削除は別のページです。<br />
+          編集者リクエストを送った人のみ表示されます。<br />
+          ※スマホだと一覧のみ閲覧可能です。<br />
+          <span className='text-gray-600 font-bold'>viewer</span>:何も役割なし<br />
+          <span className='text-blue-600 font-bold'>editor</span>:編集権限有り。<br />
+          <span className=' text-black'>操作方法</span><br />
+          1:ロールの部分をクリックし、任意の役職を選択<br />
+          2:担当クラスの部分をクリックし、任意のクラスを選択<br />
+          3:更新
         </p>
       </div>
     </div>

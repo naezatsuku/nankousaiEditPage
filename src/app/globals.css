@@ -24,6 +24,9 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+html {
+  scroll-behavior: smooth;
+}
 
 /* スクロールバー非表示用 */
 .scrollbar-hide {

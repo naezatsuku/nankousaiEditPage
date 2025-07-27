@@ -462,25 +462,21 @@ const Page = () => {
                                     
                                 </div>
                                 
-                                    <div>
-                            {    //</div>   <ScrollContainer vertical={false} className={`w-full flex flex-nowrap overflow-x-auto lg:my-0 `}>
-                                 //</div>       {value.types.map((type:string, idx:number) => (
-                                 //</div>   <div
-                                 //</div>       key={`${type}-${idx}`}
-                                 //</div>       className={`w-1/3 flex-shrink-0 mr-[5%] aspect-[3.3/1] bg-gradient-to-br ${
-                                 //</div>         Tags.find((item) => item.name === type)?.color ??
-                                 //</div>         "bg-gradient-to-r from-pink-500 to-pink-300"
-                                 //</div>       }  text-white  rounded-md flex items-center justify-center opacity-90 cursor-pointer active:scale-95 transition-transform duration-200 hover:opacity-100`}
-                                 //</div>       onClick={() => miniTagClicked(type)}
-                                 //</div>   >
-                                 //</div>       <p className="m-auto text-[2vw] lg:text-xs text-gray-50 font-medium">{type}</p>
-                                 //</div>   </div>
-                                 //</div> ))}
-                                 //</div>       </ScrollContainer>
-                                 //</div>       
-                                 }
-                                  
-
+                                <div>
+                                   <ScrollContainer vertical={false} className={`w-full flex flex-nowrap overflow-x-auto lg:my-0 `}>
+                                        {value.types.map((type:string, idx:number) => (
+                                    <div
+                                        key={`${type}-${idx}`}
+                                        className={`w-1/3 flex-shrink-0 mr-[5%] aspect-[3.3/1] bg-gradient-to-br ${
+                                          Tags.find((item) => item.name === type)?.color ??
+                                          "bg-gradient-to-r from-pink-500 to-pink-300"
+                                        }  text-white  rounded-md flex items-center justify-center opacity-90 cursor-pointer active:scale-95 transition-transform duration-200 hover:opacity-100`}
+                                        onClick={() => miniTagClicked(type)}
+                                    >
+                                        <p className="m-auto text-[2vw] lg:text-xs text-gray-50 font-medium">{type}</p>
+                                    </div>
+                                  ))}
+                                    </ScrollContainer>
                                 </div>
                                 
                                 

@@ -25,7 +25,7 @@ const AuthCallBackPage = () => {
         return
       }
 
-      router.push('/viewer')
+      router.push('/')
     }
 
     handleSessionCheck()

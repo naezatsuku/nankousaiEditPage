@@ -1,5 +1,6 @@
 'use client'
 
+import ExplanationProfile from '@/app/components/auth/ExplanationProfile'
 import UserProfileCard from '@/components/UserProfileCard'
 import { supabase } from '@/lib/supabaseClient'
 import { useRouter } from 'next/navigation'
@@ -47,7 +48,7 @@ const CompleteProfile = () => {
             console.log(error);
         }else{
             window.alert("プロフィール登録が完了しました");
-            return router.push("/viewer")
+            return router.push("/")
         }
   }}
   useEffect(() => {
@@ -71,6 +72,8 @@ const CompleteProfile = () => {
         if(name){setName(profile.name)}
         const targetData = profile as UserProfile;
         setData(targetData);
+        setClass_id(targetData.class_id);
+        setName(targetData.name);
         } else {
             console.log('プロフィールが見つかりません新しくinsertを行います');
             const userId = user.id;
@@ -98,14 +101,20 @@ const CompleteProfile = () => {
   }, [router])
 
   return (
-    <main className="p-6 max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-4">プロフィール登録</h1>
+    <div className="pt-[min(15vw,80px)] h-screen bg-white md:pt-[13vw]  lg:pt-[min(15vw,80px)]">
+      <ExplanationProfile></ExplanationProfile>
+      <main className="p-6 max-w-md mx-auto">
+      <div className='bg-white shadow-xl rounded-xl overflow-hidden border-1 border-slate-300'>
+        <div className="bg-gradient-to-br from-[#05a8bd] via-[#05bd92] to-[#f3e50a] p-4">
+              <h1 className="text-2xl font-bold text-white">プロフィール登録</h1>
+        </div>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium">
-            名前
-          </label>
-          <input
+        <div className="px-6 py-4 space-y-4">
+          <div className="flex justify-between text-gray-800">
+                <span className="font-medium">名前</span>
+          </div>
+          <div className="flex justify-between text-gray-800">
+            <input
             id="name"
             type="text"
             className="w-full border px-3 py-2 rounded"
@@ -113,12 +122,15 @@ const CompleteProfile = () => {
             onChange={(e) => setName(e.target.value)}
             required
           />
+          </div>
+          
         </div>
-        <div>
-          <label htmlFor="classId" className="block text-sm font-medium">
-            クラス番号
-          </label>
-          <input
+        <div className="px-6 py-4 space-y-4">
+          <div className="flex justify-between text-gray-800">
+            <span className="font-medium">所属クラス、出席番号</span>
+          </div>
+          <div className="flex justify-between text-gray-800">
+            <input
             id="classId"
             type="text"
             className="w-full border px-3 py-2 rounded"
@@ -126,14 +138,21 @@ const CompleteProfile = () => {
             onChange={(e) => setClass_id(e.target.value)}
             required
           />
+          </div>
+          
         </div>
-        <button
+        <div className=' flex w-full justify-center'>
+          <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="mb-4 py-2 px-8 bg-green-500 text-white font-semibold  rounded-md hover:bg-green-300 transition duration-300 hover:scale-103"
         >
-          登録する
+          送信
         </button>
+        </div>
+        
       </form>
+      </div>
+      
       <UserProfileCard
         name={data?.name ?? name}
         classId={data?.class_id ?? class_id}
@@ -142,6 +161,8 @@ const CompleteProfile = () => {
   />
 
     </main>
+    </div>
+    
   )
 
 }

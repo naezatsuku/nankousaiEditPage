@@ -1,6 +1,7 @@
 "use client"
 import ChangeRoleTables from '@/app/components/admin/ChangeRoleTables'
 import ExplanationChangeEditors from '@/app/components/admin/ExplanationChangeEditor'
+import BackTo from '@/components/global/back_button'
 import React from 'react'
 
 const changeEditor = () => {
@@ -11,6 +12,7 @@ const changeEditor = () => {
         <h1 className="text-2xl font-bold text-gray-800 mb-10 mt-4">編集権限の変更・剥奪</h1>
         <ExplanationChangeEditors></ExplanationChangeEditors>
         <ChangeRoleTables></ChangeRoleTables>
+        <BackTo link='/admin' name='管理者ホーム'></BackTo>
     </div>
   )
 }

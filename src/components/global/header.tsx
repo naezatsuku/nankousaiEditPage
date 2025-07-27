@@ -95,22 +95,24 @@ export default function Header() {
         {link:"/", name:"トップ"}, 
         {link:"/viewer", name:"展示一覧"},
         {link:"/admin", name:"管理者"},
-        {link:"/auth/profile", name:"編集権限の変更"},
+        {link:"/auth/profile", name:"アカウント情報"},
+        {link:"/auth/editRequest",name:"編集の申請"}
     ]
 
     const links_pc = [
         {link:"/", name:"トップ"},
         {link:"/viewer", name:"展示一覧"},
         {link:"/admin", name:"管理者"},
-        {link:"/auth/profile", name:"編集権限の変更"},
-        
+        {link:"/auth/profile", name:"アカウント情報"},
+        {link:"/auth/editRequest",name:"編集の申請"}
     ]
 
     const link_pc_mini = [
         {link:"/", name:"トップ"},
         {link:"/viewer", name:"展示一覧"},
         {link:"/admin", name:"管理者"},
-        {link:"/auth/profile", name:"編集権限の変更"},
+        {link:"/auth/profile", name:"アカウント情報"},
+        {link:"/auth/editRequest",name:"編集の申請"}
     ]
 
     const pullDownMenu = () => {
