@@ -11,7 +11,7 @@ const ProtectedLayout = ({children}:{children:React.ReactNode}) => {
     const router = useRouter();
     useEffect(()=>{
         if(!session && !loading){
-        return router.push("/viewer")
+        return router.push("/login")
     }
         console.log(session,loading);
     },[loading,session,router])

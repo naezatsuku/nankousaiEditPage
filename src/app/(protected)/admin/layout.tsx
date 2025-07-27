@@ -20,7 +20,8 @@ const AdminLayout = ({children}:{children:React.ReactNode}) => {
         const user = session?.user;
         console.log(user);
         if(!user && !loading){
-          return window.alert("loginしてください");
+          window.alert("loginしてください");
+          return router.push("/login")
         }
         if(user){
           const profile = await handleUserProfiles(user.id);
