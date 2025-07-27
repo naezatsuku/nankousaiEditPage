@@ -111,7 +111,7 @@ const Page = () => {
         const user = sessionData.session?.user;
         if(!user){
           console.log("user情報がない");
-          return router.push("/login")
+          return router.push("/login") 
         }
         
         const { data } = await supabase
@@ -368,6 +368,13 @@ const Page = () => {
     }
   return (
     <div className="pt-[min(15vw,80px)] h-screen bg-white md:pt-[13vw]  lg:pt-[min(15vw,80px)]">
+            <div className="w-full h-[35vw] lg:h-60 relative">
+                <Image src={"/event_placeholder.jpg"} alt="展示の様子" fill priority className="object-cover z-0 opacity-95"></Image>
+                {/* <div className="w-full h-full absolute  z-[5] opacity-15 bg-gradient-to-r from-[#05a8bd] via-[#05bd92] to-[#f3e50a]"></div> */}
+                <div className="w-full h-full absolute z-[6] flex ">
+                    <p className={`${kaiseiDecol.className} ml-[3vw] my-auto text-[10vw] lg:text-7xl text-white font-bold`}>展示一覧</p>
+                </div>
+            </div>
         <div>
             <ScrollContainer>
                 <div className='flex mt-[5vw] lg:mt-8 lg:mx-6'>
@@ -419,7 +426,7 @@ const Page = () => {
 
                 {selected_card.map((value:any, index:number) => (
                     
-                    <motion.div  key={find_cardIndex(value)} className="w-full max-w-full h-[36vw] mt-[8vw] mx-[4vw]  lg:mt-10 bg-slate-100  flex justify-between p-[0.2vw] opacity-90 drop-shadow rounded-lg lg:w-[47%] lg:max-w-[580px] lg:h-auto lg:mx-0 lg:aspect-[2.4/1] lg:mb-4 lg:p-[1px]"
+                    <motion.div  key={find_cardIndex(value)} className="mx-[4vw] h-[36vw] mt-[8vw] lg:mt-10 bg-slate-100  flex justify-between p-[0.2vw] opacity-90 drop-shadow rounded-lg lg:w-[47%] lg:max-w-[580px] lg:h-auto lg:mx-0 lg:aspect-[2.4/1] lg:mb-4 lg:p-[1px]"
                     initial={{y:20, opacity:0}} animate={selected_card.includes(value)? {y:0, opacity:1} : {y:20, opacity:0}} transition={{ease:"easeOut", duration:0.4, delay:find_cardIndex(value) * 0.05}}>
                         <div className="w-full h-full rounded-md bg-white flex">
                             <div className="flex-grow rounded-l-md pl-[2vw] pr-[1vw] my-[2vw] flex flex-col justify-around lg:my-3 lg:pl-4 lg:pr-2">
@@ -456,20 +463,22 @@ const Page = () => {
                                 </div>
                                 
                                     <div>
-                                    <ScrollContainer vertical={false} className={`w-full flex flex-nowrap overflow-x-auto lg:my-0 `}>
-                                        {value.types.map((type:string, idx:number) => (
-                                    <div
-                                        key={`${type}-${idx}`}
-                                        className={`w-1/3 flex-shrink-0 mr-[5%] aspect-[3.3/1] bg-gradient-to-br ${
-                                          Tags.find((item) => item.name === type)?.color ??
-                                          "bg-gradient-to-r from-pink-500 to-pink-300"
-                                        }  text-white  rounded-md flex items-center justify-center opacity-90 cursor-pointer active:scale-95 transition-transform duration-200 hover:opacity-100`}
-                                        onClick={() => miniTagClicked(type)}
-                                    >
-                                        <p className="m-auto text-[2vw] lg:text-xs text-gray-50 font-medium">{type}</p>
-                                    </div>
-                                  ))}
-                                    </ScrollContainer>
+                            {    //</div>   <ScrollContainer vertical={false} className={`w-full flex flex-nowrap overflow-x-auto lg:my-0 `}>
+                                 //</div>       {value.types.map((type:string, idx:number) => (
+                                 //</div>   <div
+                                 //</div>       key={`${type}-${idx}`}
+                                 //</div>       className={`w-1/3 flex-shrink-0 mr-[5%] aspect-[3.3/1] bg-gradient-to-br ${
+                                 //</div>         Tags.find((item) => item.name === type)?.color ??
+                                 //</div>         "bg-gradient-to-r from-pink-500 to-pink-300"
+                                 //</div>       }  text-white  rounded-md flex items-center justify-center opacity-90 cursor-pointer active:scale-95 transition-transform duration-200 hover:opacity-100`}
+                                 //</div>       onClick={() => miniTagClicked(type)}
+                                 //</div>   >
+                                 //</div>       <p className="m-auto text-[2vw] lg:text-xs text-gray-50 font-medium">{type}</p>
+                                 //</div>   </div>
+                                 //</div> ))}
+                                 //</div>       </ScrollContainer>
+                                 //</div>       
+                                 }
                                   
 
                                 </div>

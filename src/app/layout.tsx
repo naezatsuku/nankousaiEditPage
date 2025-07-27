@@ -26,6 +26,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
+      <head>
+        <meta name="viewport" content="width=device-width,initial-scale=1"/>
+        <title>編集ページ</title>
+        {/* 他の meta や title など */}
+      </head>
+
       <body
         className={`${kiwi_Maru.className}`}
       >

@@ -27,18 +27,23 @@ const UsersTable = () => {
     };
     const handleDeleteSelected = async () => {
         console.log(selectedIds);
-        //if (selectedIds.length === 0) return;
-        //const { error } = await supabase
-        //    .from('user_profiles')
-        //    .delete()
-        //    .in('user_id', selectedIds);
-//
-        //if (error) {
-        //    alert('削除に失敗しました');
-        //} else {
-        //    fetchData(); 
-        //    setSelectedIds([]); 
-        //}
+        if(!window.confirm("ほんとにユーザーを削除しますか？")){
+          return;
+        }
+        if (selectedIds.length === 0) return;
+        const { error } = await supabase
+            .from('user_profiles')
+            .delete()
+            .in('user_id', selectedIds);
+
+        if (error) {
+            alert('削除に失敗しました');
+        } else {
+            fetchData(); 
+            setSelectedIds([]); 
+            alert("削除に成功しました")
+            window.location.reload()
+        }
     };
 
     const fetchData = async () => {

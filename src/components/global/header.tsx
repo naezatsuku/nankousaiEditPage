@@ -43,16 +43,35 @@ export default function Header() {
         if(menu == false) {
             setMenu(true)
             setHamburger(false)
-            menuAnimate(targetMenu.current, { height: "100vh",}, {ease:"easeOut", duration:0.25}, )
-            disappearAnimate(targetButton.current, {opacity:0}, {ease:"easeOut", duration:0.1})
-            rotateAnimate(targetIcon.current, {scale:1.5 ,transform:"rotate(135deg)", opacity:100}, {ease:"easeOut", duration:0.25})
-            setHamburgerAnmie(hamburgerAnime.current, {opacity:0}, {ease:"easeOut", duration:0.25})
+            if (targetMenu.current) {
+              menuAnimate(targetMenu.current, { height: "100vh" }, {ease:"easeOut", duration:0.25})
+            }
+            if(targetButton.current){
+                disappearAnimate(targetButton.current, {opacity:0}, {ease:"easeOut", duration:0.1})
+            }
+            if(targetIcon.current){
+                rotateAnimate(targetIcon.current, {scale:1.5 ,transform:"rotate(135deg)", opacity:100}, {ease:"easeOut", duration:0.25})
+            }
+            if(hamburgerAnime.current){
+                setHamburgerAnmie(hamburgerAnime.current, {opacity:0}, {ease:"easeOut", duration:0.25})
+            }
+            
+            
         } else {
             setMenu(false)
-            menuAnimate(targetMenu.current, { height:0,}, {ease:"easeInOut", duration:0.3})
-            disappearAnimate(targetButton.current, {opacity:1}, {ease:"easeOut",duration:0.2, delay:0.3})
-            rotateAnimate(targetIcon.current, {scale:1,   transform:"rotate(0deg)", opacity:0}, {ease:"easeOut", duration:0.25})
-            setHamburgerAnmie(hamburgerAnime.current, {opacity:80}, {ease:"easeOut", duration:0.25})
+            if (targetMenu.current) {
+                menuAnimate(targetMenu.current, { height:0,}, {ease:"easeInOut", duration:0.3})
+            }
+            if(targetButton.current){
+                disappearAnimate(targetButton.current, {opacity:1}, {ease:"easeOut",duration:0.2, delay:0.3})
+            }
+            if(targetIcon.current){
+                rotateAnimate(targetIcon.current, {scale:1,   transform:"rotate(0deg)", opacity:0}, {ease:"easeOut", duration:0.25})
+            }
+            if(hamburgerAnime.current){
+                setHamburgerAnmie(hamburgerAnime.current, {opacity:80}, {ease:"easeOut", duration:0.25})
+            }
+            
             setHamburger(true)
         }
     }
@@ -73,27 +92,25 @@ export default function Header() {
     }
 
     const links = [
-        {link:"/info", name:"参加方法"}, 
         {link:"/", name:"トップ"}, 
-        {link:"/event", name:"展示一覧"}, 
-        {link:"/info#access", name:"アクセス"}, 
-        {link:"/map", name:"マップ"}, 
-        {link:"/timetable", name:"タイムテーブル"},
-        {link:"/gallery", name:"ギャラリー"},
+        {link:"/viewer", name:"展示一覧"},
+        {link:"/admin", name:"管理者"},
+        {link:"/auth/profiles", name:"編集権限の変更"},
     ]
 
     const links_pc = [
-        {link:"/event", name:"イベント"}, 
-        {link:"/info#access", name:"アクセス"}, 
-        {link:"/map", name:"マップ"}, 
-        {link:"/timetable", name:"タイムテーブル"},
-        {link:"/gallery", name:"ギャラリー"},
+        {link:"/", name:"トップ"},
+        {link:"/viewer", name:"展示一覧"},
+        {link:"/admin", name:"管理者"},
+        {link:"/auth/profiles", name:"編集権限の変更"},
+        
     ]
 
     const link_pc_mini = [
-        {link:"/event", name:"イベント"}, 
-        {link:"/map", name:"マップ"}, 
-        {link:"/timetable", name:"タイムテーブル"},
+        {link:"/", name:"トップ"},
+        {link:"/viewer", name:"展示一覧"},
+        {link:"/admin", name:"管理者"},
+        {link:"/auth/profiles", name:"編集権限の変更"},
     ]
 
     const pullDownMenu = () => {
@@ -152,17 +169,8 @@ export default function Header() {
                 </div>
                 
                 <div className="flex items-center  z-[70] ml-[3vw] lg:mr-7 lg:ml-2">
-                    <Link ref={targetButton} href={"/info"} onClick={clickButton}>
-                        <motion.div whileHover={{scale:1.05, opacity:1}}  whileTap={{scale:0.95}} transition={{type:"spring", duration:0.2, bounce:0.1}} className={`relative w-[28vw] opacity-90 lg:w-[170px]`}>
-                            {/* <RoundButtonPink text={"参加申し込み"} size={40}></RoundButtonPink> */}
-                            <SquareButtonPinkShadow2 text="参加申し込み" ></SquareButtonPinkShadow2>
-                            <div ref={targetPink} className="w-full h-full opacity-0 absolute border-[6px] rounded-md top-0 left-0 z-0 border-[#e564ff] "></div>
-                        </motion.div>
-                    </Link>
+                    
 
-                    {/* <div className={`${menu == false && "hidden"} w-[28vw]`}>
-                        <SquareButtonWhite text="参加申し込み"></SquareButtonWhite>   
-                    </div> */}
                     <motion.div   className="lg:hidden w-[8vw] aspect-square cursor-pointer text-white ml-[2vw] mr-[3vw] opacity-70 z-20 relative">
                         <motion.div className={`size-full absolute opacity-80`} onClick={showMenu} whileHover={{opacity:1}} transition={{duration:0.1}} ref={hamburgerAnime}>
                             <CiMenuFries className={`size-full`} ></CiMenuFries>    
