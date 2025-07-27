@@ -25,7 +25,7 @@ type content = {
     tags:Array<string>;
 }
 
-const page = () => {
+const Page = () => {
   const [profile,setProfile] = useState({
     name:"",
     class_id:"",
@@ -39,13 +39,13 @@ const page = () => {
 
     const allEvents = events;
     console.log(allEvents)
-    let eventData = []; 
+    const eventData = []; 
     for(let i = 0; i < allEvents!.length; i++) {
         const item = allEvents![i]
         let tags:Array<string> = []
         let types:Array<string> = []
         
-        let keyword = ["高校", "中学"] 
+        const keyword = ["高校", "中学"] 
         for(let i = 0; i < keyword.length; i++) {
             if(item.className.includes(keyword[i])) {
                 tags.push(keyword[i])
@@ -126,9 +126,9 @@ const page = () => {
     
       const getData = async ()=>{
         const classDatas = await formulateClassData();
-        let new_classDatas = classDatas;
+        const new_classDatas = classDatas;
         //console.log(contents);
-        let compare = (a:any,b:any) => {
+        const compare = (a:any,b:any) => {
             if(a.className > b.className) {
                 return 1;
             } else {
@@ -175,17 +175,17 @@ const page = () => {
 
     const params = useSearchParams();
     const type = params.get("type")?.toString();
-    let types:Array<string> =[]; 
+    const types:Array<string> =[]; 
     let newTag:Array<{id:string, name:string, color:string}> = [];
 
     if(type!= undefined){
         
         types.push(type);
 
-        let find_tag = Tags.find((value)=>value.name==type);
+        const find_tag = Tags.find((value)=>value.name==type);
         if(find_tag){
             newTag.push(find_tag);
-            let others = Tags.filter((value)=>value.name != type);
+            const others = Tags.filter((value)=>value.name != type);
             others.forEach((value)=>newTag.push(value))
         }
     }else{
@@ -213,7 +213,7 @@ const page = () => {
                 return false
             }
     
-            let found = classDatasMap.filter(find_tag)
+            const found = classDatasMap.filter(find_tag)
     
             return found
         }
@@ -242,7 +242,7 @@ const page = () => {
         let newData:Array<string> = []
 
         if(e.target.checked) {
-            let newArray = selected
+            const newArray = selected
             newArray.push(e.target.value)
             setSelected(newArray)
             newData = newArray 
@@ -498,4 +498,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

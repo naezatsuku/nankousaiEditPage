@@ -4,19 +4,14 @@ import Image from "next/image"
 import { MdOutlinePlace } from "react-icons/md";
 import { IoTimeOutline } from "react-icons/io5";
 import NotReady from "../global/parts/notReady";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { KaiseiDecol } from "@/fonts";
-import { FaAngleDown } from "react-icons/fa";
-import Keion from "@/components/introduction/Keion";
 import { HowToPay } from "@/components/introduction/atentions"
-import GetFood from "@/components/introduction/show_foods";
 import SadouClub from "@/components/introduction/sadou_club";
 import Pranetarium_tiket from "@/components/introduction/atentions";
 import { CookingClubNotice } from "@/components/introduction/atentions";
 import { Cafe_trash } from "@/components/introduction/atentions";
-import { button, div, u } from "framer-motion/client";
 import { supabase } from "@/lib/supabaseClient";
 import { FaSave } from "react-icons/fa"; 
 import EditFood from "./edit_foods";
@@ -45,24 +40,7 @@ type eventData = {
     }>,
     name:string
 }
-type preClassData ={
-    id:string,
-    className:string,
-    comment:string,
-    available:boolean,
-    language:string,
-    place:string,
-    type:string,
-    genre:Array<string>,
-    title:string,
-    waitTime:string;
-    prevTime:string,
-    imageURL:string,
-    imageBackURL:string,
-    imageVersion:string,
-    time:Array<string>,
 
-}
 type detail = Array<{
     title:string,
     content:string
@@ -71,7 +49,54 @@ type detail = Array<{
 export default function ShowDetails (
     {event, detail, name}:eventData
 ) { 
-
+    const baseTagList=[
+        {id:"food", name:"フード", color:"from-orange-400 via-orange-400 to-yellow-400"}, 
+        {id:"act", name:"体験", color:"from-green-300 via-teal-400 to-cyan-500"},
+        {id:"live", name:"ライブ", color:"from-purple-300 via-fuchsia-400 to-pink-400"},
+        {id:"perform", name:"パフォーマンス", color:"from-blue-400 via-sky-300 to-sky-200"},
+        {id:"attraction", name:"アトラクション", color:"from-red-200 via-purple-400 to-blue-500"},
+        {id:"shopping", name:"ショッピング", color:"from-red-200 to-purple-400"},
+        {id:"horror", name:"ホラー", color:"from-red-500 to-rose-300"},
+        {id:"rest", name:"休憩", color:"from-cyan-500 to-yellow-300"},
+        {id:"other", name:"その他", color:"from-sky-600 to-sky-200"},
+    ]
+    const [imageBackFile, setImageBackFile] = useState<File | null>(null);
+    const [imageFrontFile, setImageFrontFile] = useState<File | null>(null);
+    const [previmageBackUrl,setPrevimageBackUrl] = useState<string | undefined>(undefined)
+    const [previmageFrontUrl,setPrevimageFrontUrl] = useState<string | undefined>(undefined)
+    const [previewBackUrl,setPreviewBackUrl] = useState<string | undefined>(undefined)
+    const [previewFrontUrl,setPreviewFrontUrl] = useState<string | undefined>(undefined)
+    //編集のinput要素の内容を保存
+    const [informationTitle,setInformationTitle] = useState<string>("");
+    const [informationContent,setInformationContent] = useState<string>("");
+    const [eventTitle,setEventTitle] = useState<string>("");
+    const [eventPlace,setEventPlace] = useState<string>("");
+    const [eventComment,setEventComment] = useState<string>("")
+    const [eventTag,setEventTag] = useState<Array<string>>([]);
+    const [eventTypeTag,setEventTypeTag] = useState(event.type? event.type : "クラス展示");
+    const [eventTime,setEventTime] = useState<Array<string>>([""])
+    const [newTagName, setNewTagName] = useState("");
+    const [canBeChoosenTag, setCanBeChoosenTag] = useState(baseTagList);
+    const [date, setDate] = useState(false) 
+    useEffect(()=>{
+        handlePrevCustomTag();
+        imageUrl(name)
+        setEventTitle(event.title);
+        setInformationTitle(detail[0].title);
+        setInformationContent(detail[0].content);
+        setEventPlace(event.place);
+        setEventComment(event.comment);
+        setEventTime(event.time);
+        const allTags = event.tags;
+        if(allTags.includes("null")){
+            const update = allTags.filter(t=>t != "null");
+            event.tags=update;
+            setEventTag(update);
+        }else{
+            setEventTag(allTags);
+        }
+        
+    },[])
     if(detail.length == 0){
         return (
             <>
@@ -79,12 +104,7 @@ export default function ShowDetails (
             </>
         )
     }
-    const [imageBackFile, setImageBackFile] = useState<File | null>(null);
-    const [imageFrontFile, setImageFrontFile] = useState<File | null>(null);
-    const [previmageBackUrl,setPrevimageBackUrl] = useState<string | undefined>(undefined)
-    const [previmageFrontUrl,setPrevimageFrontUrl] = useState<string | undefined>(undefined)
-    const [previewBackUrl,setPreviewBackUrl] = useState<string | undefined>(undefined)
-    const [previewFrontUrl,setPreviewFrontUrl] = useState<string | undefined>(undefined)
+    
     //アップロードされた画像のUrlを作成
     const handlePreviewBackUrl = (e:React.ChangeEvent<HTMLInputElement>)=>{
         const file = e.target.files?.[0];
@@ -175,17 +195,7 @@ export default function ShowDetails (
         {id:"cafe", name:"食堂", color:"from-orange-400 via-orange-400 to-yellow-400"},
     ]
     //生徒が決められるtag編集できる
-    const baseTagList=[
-        {id:"food", name:"フード", color:"from-orange-400 via-orange-400 to-yellow-400"}, 
-        {id:"act", name:"体験", color:"from-green-300 via-teal-400 to-cyan-500"},
-        {id:"live", name:"ライブ", color:"from-purple-300 via-fuchsia-400 to-pink-400"},
-        {id:"perform", name:"パフォーマンス", color:"from-blue-400 via-sky-300 to-sky-200"},
-        {id:"attraction", name:"アトラクション", color:"from-red-200 via-purple-400 to-blue-500"},
-        {id:"shopping", name:"ショッピング", color:"from-red-200 to-purple-400"},
-        {id:"horror", name:"ホラー", color:"from-red-500 to-rose-300"},
-        {id:"rest", name:"休憩", color:"from-cyan-500 to-yellow-300"},
-        {id:"other", name:"その他", color:"from-sky-600 to-sky-200"},
-    ]
+    
     console.log()
 
     const handleAddCustomTag = () => {
@@ -207,18 +217,9 @@ export default function ShowDetails (
 
 
 
-    //編集のinput要素の内容を保存
-    const [informationTitle,setInformationTitle] = useState<string>("");
-    const [informationContent,setInformationContent] = useState<string>("");
-    const [eventTitle,setEventTitle] = useState<string>("");
-    const [eventPlace,setEventPlace] = useState<string>("");
-    const [eventComment,setEventComment] = useState<string>("")
-    const [eventTag,setEventTag] = useState<Array<string>>([]);
-    const [eventTypeTag,setEventTypeTag] = useState(event.type? event.type : "クラス展示");
-    const [eventTime,setEventTime] = useState<Array<string>>([""])
+    
 
-    const [newTagName, setNewTagName] = useState("");
-    const [canBeChoosenTag, setCanBeChoosenTag] = useState(baseTagList);
+    
     
     const handlePrevCustomTag = ()=>{
         const customTagName = event.tags.filter((tagName)=>{
@@ -238,25 +239,7 @@ export default function ShowDetails (
     
 
     
-    useEffect(()=>{
-        handlePrevCustomTag();
-        imageUrl(name)
-        setEventTitle(event.title);
-        setInformationTitle(detail[0].title);
-        setInformationContent(detail[0].content);
-        setEventPlace(event.place);
-        setEventComment(event.comment);
-        setEventTime(event.time);
-        const allTags = event.tags;
-        if(allTags.includes("null")){
-            const update = allTags.filter(t=>t != "null");
-            event.tags=update;
-            setEventTag(update);
-        }else{
-            setEventTag(allTags);
-        }
-        
-    },[])
+    
     const handleInformationTitleChange = (newTitle:string)=>{
         const update = newTitle;
         
@@ -343,7 +326,7 @@ const removeEventTime = (index: number) => {
         window.location.reload();
     }
 
-    const [date, setDate] = useState(false)
+    
     console.log(event);
     const onMenuClicked = () => {
         if(date == false) {
@@ -416,7 +399,7 @@ const removeEventTime = (index: number) => {
         }
     }
 
-    let newDetails:detail = []
+    const newDetails:detail = []
 
     for(let i = 0; i < detail.length; i++) {
         if(detail[i].content.includes("テキスト") == false) {

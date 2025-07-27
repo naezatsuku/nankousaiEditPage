@@ -16,7 +16,7 @@ export async function getEventDetails(name:string) {
         return "failed"
     }
 
-    let newContent = allEvents?.find((value) => (
+    const newContent = allEvents?.find((value) => (
         value.className == name
     ))
 
@@ -36,7 +36,7 @@ export async function getEventDetails(name:string) {
         details = detail
     }
 
-    let newEvent = newContent
+    const newEvent = newContent
     
     if(!newEvent.time){
         newEvent.time=["終日開催"]
@@ -47,9 +47,9 @@ export async function getEventDetails(name:string) {
         newEvent.time = newEvent.time;
     }
    
-    let tags = [newEvent.type]
+    const tags = [newEvent.type]
     
-    let keyword = ["高校", "中学"] 
+    const keyword = ["高校", "中学"] 
     for(let i = 0; i < keyword.length; i++) {
         if(name.includes(keyword[i])) {
             tags.push(keyword[i])

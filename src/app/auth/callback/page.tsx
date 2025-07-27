@@ -1,8 +1,7 @@
 "use client"
-import { useSession } from '@/hooks/useSession';
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation'
-import React, { useEffect } from 'react'
+import  { useEffect } from 'react'
 
 const AuthCallBackPage = () => {
   const router = useRouter();

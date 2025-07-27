@@ -81,5 +81,5 @@ export async function getBandData() {
 
     
     return resultedData;
-    let new_data:Array<new_data>  = []
+    const new_data:Array<new_data>  = []
 }

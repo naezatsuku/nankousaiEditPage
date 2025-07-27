@@ -16,7 +16,7 @@ export async function getEditEventDetails(name:string) {
         return "failed"
     }
 
-    let newContent = allEvents?.find((value) => (
+    const newContent = allEvents?.find((value) => (
         value.className == name
     ))
 
@@ -36,7 +36,7 @@ export async function getEditEventDetails(name:string) {
         details = detail
     }
 
-    let newEvent = newContent
+    const newEvent = newContent
     
     if(!newEvent.time){
         newEvent.time=["終日開催"]

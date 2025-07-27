@@ -210,7 +210,7 @@ export default function ShowDetails (
         }
     }
 
-    let newDetails:detail = []
+    const newDetails:detail = []
 
     for(let i = 0; i < detail.length; i++) {
         if(detail[i].content.includes("テキスト") == false) {

@@ -52,7 +52,7 @@ export default function Page() {
         }
         
         getData()
-    },[])
+    },[name])
 
     const jsonLd = {
         "@context": "http://schema.org",

@@ -26,9 +26,9 @@ export async function getBandData() {
     if(band == null) {
         return "failed"
     }
-    let new_data:Array<new_data>  = []
+    const new_data:Array<new_data>  = []
 
-    let edit_data = band.map(({name, time, comment, available}:band_type) => {
+    const edit_data = band.map(({name, time, comment, available}:band_type) => {
         const split = time.split(" ")
 
         const split_map = split.map((i:string) =>{
@@ -37,7 +37,7 @@ export async function getBandData() {
                 value.split("-")
             )) 
             const new_edit_Times = edit_Times.map((value) => {
-                var newData = []
+                let newData = []
                 if(value[3].charAt(0) == "0") {
                     newData = [value[3].replace("0", ""),value[4]]
                 } else {
@@ -56,7 +56,7 @@ export async function getBandData() {
                 return new Date(e[0], e[1] - 1, e[2], e[3], e[4])
             })
             const timeAsTimeStamp = timesAsDate.map((value) => (Math.floor(value.getTime() / 1000)))
-            let timeText = ["",new_edit_Times[0][0] + ":" + new_edit_Times[0][1], new_edit_Times[1][0] + ":" + new_edit_Times[1][1]]
+            const timeText = ["",new_edit_Times[0][0] + ":" + new_edit_Times[0][1], new_edit_Times[1][0] + ":" + new_edit_Times[1][1]]
 
             if(i.includes("09-07") || i.includes("9-7")) {
                 timeText[0] = "9/7"

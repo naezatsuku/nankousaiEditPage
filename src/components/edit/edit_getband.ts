@@ -50,7 +50,7 @@ export async function edit_getBandData() {
     })
 ) 
     return edited_data;
-    let new_data:Array<new_data>  = []
+    const new_data:Array<new_data>  = []
 /*
     let edit_data = band.map(({name, time, comment, available}:band_type) => {
         const split = time.split(" ")

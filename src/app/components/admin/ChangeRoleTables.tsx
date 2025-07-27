@@ -12,7 +12,7 @@ type user_profile = {
   created_at: string | null;
   updated_at: string | null;
 };
-const changeRoleTables: React.FC = () => {
+const ChangeRoleTables: React.FC = () => {
     const [data, setData] = useState<user_profile[]>();
     const fetchData = async () => {
             const { data: profiles, error } = await supabase
@@ -39,4 +39,4 @@ const changeRoleTables: React.FC = () => {
   )
 }
 
-export default changeRoleTables
+export default ChangeRoleTables

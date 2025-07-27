@@ -69,7 +69,6 @@ export default function ShowDetails (
             rotate:"180deg"
         }
     }
-
     const Tags = [
         {id:"tenji", name:"展示", color:"from-blue-500 via-indigo-500 to-purple-500"},
         {id:"food", name:"フード", color:"from-orange-400 via-orange-400 to-yellow-400"},
@@ -116,7 +115,7 @@ export default function ShowDetails (
         }
     }
 
-    let newDetails:detail = []
+    const newDetails:detail = []
 
     for(let i = 0; i < detail.length; i++) {
         if(detail[i].content.includes("テキスト") == false) {

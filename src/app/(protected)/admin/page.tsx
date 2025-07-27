@@ -14,7 +14,7 @@ type user_profile = {
   created_at: string | null;
   updated_at: string | null;
 };
-const page = () => {
+const Page = () => {
   const [data, setData] = useState<user_profile[]>();
   const fetchData = async () => {
           const { data: profiles, error } = await supabase
@@ -81,4 +81,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
