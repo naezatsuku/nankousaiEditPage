@@ -21,6 +21,7 @@ const kaiseiDecol = KaiseiDecol
 
 type eventData = {
     event:{
+        className:string,
         img: string;
         title:string,
         comment:string,

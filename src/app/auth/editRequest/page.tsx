@@ -13,13 +13,13 @@ type UserProfile = {
   email:string
   TargetEditClass:string,
   request_edit:boolean,
-
+  requestTargetClass:string,
 
 }
 const EditRequest = () => {
     const [data,setData] = useState<UserProfile | null>();
     const [request,setRequest] = useState<boolean>(false);
-    const [requestClass,setRequestClass] = useState<string>();
+    const [requestClass,setRequestClass] = useState<string>("");
     const [classNames,setClassNames] =  useState<string[]>()
     const router = useRouter();
     let compare = (a:any,b:any) => {
@@ -75,14 +75,14 @@ const EditRequest = () => {
       const date = new Date().toISOString()
       const sendData ={
         request_edit:request,
-        TargetEditClass:requestClass,
+        requestTargetClass:requestClass,
         updated_at : date
       }
       //console.log(sendData);
       console.log(data?.user_id)
       const {error} = await supabase.from("user_profiles").update(sendData).eq("user_id",data?.user_id);
       if(error){
-        console.log(error);
+        window.alert("更新に失敗")
       }else{
         window.alert("更新に成功")
       }
@@ -114,7 +114,23 @@ const EditRequest = () => {
                 <span className="font-medium">役職</span>
                 <span>{data.role}</span>
               </div>
-        
+              <div className="flex justify-between text-gray-800">
+                <span className="font-medium">現在の担当クラス</span>
+                <span>{data.TargetEditClass ?? "なし"}</span>
+              </div>
+              {data.request_edit &&
+              <>
+              <div className="flex justify-between text-gray-800">
+                <span className="font-medium text-red-400">すでにリクエスト済みです</span>
+              </div>
+              <div className="flex justify-between text-gray-800">
+                <span className="font-medium">希望担当クラス</span>
+                <span>{data.requestTargetClass ?? "なし"}</span>
+              </div>
+              </>
+              
+              
+              }
               {/* フォーム */}
               <form onSubmit={handleSubmit} className="space-y-4">
                 <label className="flex items-center cursor-pointer">
@@ -134,16 +150,13 @@ const EditRequest = () => {
                     </label>
                     <select
                       id="desiredClass"
-                      value={requestClass}
+                      value={requestClass ?? ""}
                       onChange={e => setRequestClass(e.target.value)}
                       className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
                     >
-                      {/* プレースホルダー風に最初の選択肢を無効化 */}
                       <option value="" disabled>
                         クラスを選択
                       </option>
-
-                      {/* 動的にオプションを生成 */}
                       {classNames?.map((className) => (
                         <option key={className} value={className}>
                           {className}

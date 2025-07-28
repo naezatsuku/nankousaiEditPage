@@ -227,11 +227,6 @@ export default function ShowDetails (
                         <Pranetarium_tiket></Pranetarium_tiket>
                     </div>
                 }
-                {name == "茶道部" &&
-                    <div className="w-full px-[4vw]  lg:px-5 pb-[3vw] lg:pb-14">
-                        <SadouClub></SadouClub>
-                    </div>
-                }
                 {name == "高校軽音楽部" &&
                     <Keion></Keion>
                 }

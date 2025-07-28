@@ -30,11 +30,9 @@ const HandleClass: React.FC = () => {
   const [loading, setLoading] = useState(true)
   const [err, setErr] = useState<string | null>(null)
 
-  // 新規追加用 state
   const [newClassName, setNewClassName] = useState('')
   const [newType, setNewType] = useState('')
 
-  // 全データ取得
   const fetchAll = async () => {
     setLoading(true)
     setErr(null)
@@ -83,26 +81,30 @@ const HandleClass: React.FC = () => {
     fetchAll()
   }, [])
 
-  // contents 追加
-  const handleAddContent = async () => {
+
+  const handleAddContent = async (e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     if (!newClassName.trim() || !newType.trim()) {
       alert('クラス名とタイプを両方入力してください')
       return 
     }
-
+    const check = rows.filter((item)=>item.className == newClassName);
+    console.log(check);
+    if(check.length != 0){
+      return window.alert("すでに同じ名前の展示が存在しています")
+    }
     const { data, error } = await supabase
       .from('contents')
       .insert({ className: newClassName, type: newType })
       .select('id')
       .single()
-    if (error) {
+    if (!data ||error) {
       alert(`${error.message}`)
       alert('contents の追加に失敗しました')
       console.error(error)
       return
     }
 
-    // 追加後に自動で hasIntro/hasFood は false
     const newRow: Row = {
       id: data.id,
       className: newClassName,
@@ -115,9 +117,11 @@ const HandleClass: React.FC = () => {
     )
     setNewClassName('')
     setNewType('')
+    window.alert("追加に成功しました");
+    window.location.reload()
   }
 
-  // Introduction 追加
+  //Introduction追加
   const handleAddIntro = async (className: string) => {
     if (rows.find((r) => r.className === className)?.hasIntro) return
 
@@ -140,7 +144,7 @@ const HandleClass: React.FC = () => {
     )
   }
 
-  // Food 追加
+  //Food追加
   const handleAddFood = async (className: string) => {
     if (rows.find((r) => r.className === className)?.hasFood) return
 
@@ -159,7 +163,7 @@ const HandleClass: React.FC = () => {
     )
   }
 
-  // contents 削除
+  //contents削除
   const handleDelete = async (id: number) => {
     if (!confirm('本当にこのクラスを削除しますか？')) return
     const { error } = await supabase.from('contents').delete().eq('id', id)
@@ -176,7 +180,6 @@ const HandleClass: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* 新規追加フォーム */}
       <form
         onSubmit={handleAddContent}
         className="flex items-end space-x-4 bg-gray-50 p-4 rounded"
