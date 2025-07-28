@@ -71,10 +71,16 @@ export async function getEditEventDetails(name:string) {
         }else{
             newEvent.img= "/NOIMAGE.png";
         }
-
+    if(!newEvent.imageBackURL || newEvent.imageBackURL=="null"){
+        newEvent.imageBackURL = ""
+    }
+    if(!newEvent.imageURL || newEvent.imageURL=="null"){
+        newEvent.imageURL = ""
+    }
     const result = {
         event:newEvent, detail:details
     }
+    
     
     return result
 }

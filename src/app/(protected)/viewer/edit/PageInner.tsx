@@ -8,6 +8,7 @@ import NotFound from '@/components/global/parts/notFound'
 import { getEditEventDetails } from './action'
 import { supabase } from '@/lib/supabaseClient'
 type eventData = { event:{ 
+    id:number
     className:string,
     img:string
     title:string,

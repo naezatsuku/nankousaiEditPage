@@ -17,10 +17,12 @@ import { FaSave } from "react-icons/fa";
 import EditFood from "./edit_foods";
 import EditKeion from "./edit_Keion";
 import { v4 as uuidv4 } from "uuid";
+import imageCompression from "browser-image-compression";
 const kaiseiDecol = KaiseiDecol
 
 type eventData = {
     event:{
+        id:number,
         className:string,
         img: string;
         title:string,
@@ -50,6 +52,8 @@ type detail = Array<{
 export default function ShowDetails (
     {event, detail, name}:eventData
 ) { 
+    const MAX_SIZE = 1 * 1024 * 1024  // 1MB 上限
+
     const baseTagList=[
         {id:"food", name:"フード", color:"from-orange-400 via-orange-400 to-yellow-400"}, 
         {id:"act", name:"体験", color:"from-green-300 via-teal-400 to-cyan-500"},
@@ -78,7 +82,8 @@ export default function ShowDetails (
     const [eventTime,setEventTime] = useState<Array<string>>([""])
     const [newTagName, setNewTagName] = useState("");
     const [canBeChoosenTag, setCanBeChoosenTag] = useState(baseTagList);
-    const [date, setDate] = useState(false) 
+    const [date, setDate] = useState(false) ;
+
     useEffect(()=>{
         handlePrevCustomTag();
         imageUrl(name)
@@ -147,44 +152,60 @@ export default function ShowDetails (
           { file: imageBackFile, path: `${event.imageBackURL}`, key: "imageBackURL"},
           { file: imageFrontFile, path: `${event.imageURL}`, key: "imageURL"}
         ];
+        console.log(uploads);
         for (const { file, path, key } of uploads) {
+            if(!file){
+                console.log(key,":",path,"ファイルがないのでスキップ")
+                continue 
+            }
+            const targetFile = await compressFile(file);
+            if(file.size >MAX_SIZE){
+                if(window.confirm("ファイルサイズが大きいので圧縮しますいいですか？")){
+
+                }else{
+                    continue
+                }
+                
+            }
             let imgPath = path;
-            
-            const version = new Date().toISOString();
             //pathによって処理を変える。
-            if (!file) continue;
-            if(path && path != "NOIMAGE"){
-                const { error } = await supabase.storage.from("class-img").update(path, file);
+            if(path!=null && path != "NOIMAGE" &&path != ""){
+                console.log(key,":すでにURLがある")
+                const { error } = await supabase.storage.from("class-img").update(path, targetFile);
                 if (error) {
                     console.log(error)
                     console.error(`Upload failed (${key}):`, error.message);
                     window.alert(`画像の更新に失敗しました(${key}):`)
-                    return;
+                    continue;
                 }
               }else{
+                console.log("URLがない")
                 const imgURLName = uuidv4();
-                const {error:uploadError} = await supabase.storage.from("class-img").upload(imgURLName,file);
+                const {error:uploadError} = await supabase.storage.from("class-img").upload(imgURLName,targetFile);
                 if (uploadError) {
                   window.alert(`${key}の画像のアップロードに失敗しました。`);
-                  return;
+                  continue;
                 }
                 imgPath = imgURLName;
 
               }
+            console.log("imgPath",imgPath);
             const updates:Record<string,any> ={
                 imageVersion:version,
                 [key]:imgPath
             }
-            const {error:uploadError}=await supabase.from("contents").update(updates).eq("className",name)
+            const {error:uploadError}=await supabase.from("contents").update(updates).eq("id",event.id)
             if(uploadError){
                 console.error(uploadError.message);
                 window.alert(`画像の更新に失敗しました（${key}）`);
                 continue;
 
             }
-            console.log("event[key] BEFORE:", event[key]);
-            console.log("path BEFORE:", path);
-            console.log(imgPath)
+        } 
+        if(confirm("画像は更新されました。リロードすると反映されますが、画像以外の編集状況はリセットされます。現在の編集状況も更新しますか？")){
+            upDateData();
+        }else{
+            return
         }
           };
 
@@ -285,13 +306,34 @@ export default function ShowDetails (
       });
     };
 
-const addEventTime = () => {
-      setEventTime((prev) => [...prev, ""]);
-    };
+    const addEventTime = () => {
+          setEventTime((prev) => [...prev, ""]);
+        };
 
-const removeEventTime = (index: number) => {
-      setEventTime((prev) => prev.filter((_, i) => i !== index));
-    };
+    const removeEventTime = (index: number) => {
+          setEventTime((prev) => prev.filter((_, i) => i !== index));
+        };
+    //ファイルの圧縮
+    const compressFile = async (file: File): Promise<File> => {
+      // 圧縮オプション
+      const options = {
+        maxSizeMB: 1,           
+        maxWidthOrHeight: 1024, 
+        useWebWorker: true,     
+        initialQuality: 0.8,    
+      }
+  
+      try {
+        const compressedFile = await imageCompression(file, options)
+        console.log('圧縮前:', (file.size/1024/1024).toFixed(2), 'MB')
+        console.log('圧縮後:', (compressedFile.size/1024/1024).toFixed(2), 'MB')
+        return compressedFile
+      } catch (e) {
+        console.error('圧縮に失敗しました', e)
+        return file   // 失敗したら元ファイルを返す
+      }
+    }
+    
     //データベースで更新する。
     const upDateData = async ()=>{
         const targetClass = name;
@@ -577,11 +619,6 @@ const removeEventTime = (index: number) => {
                         <Pranetarium_tiket></Pranetarium_tiket>
                     </div>
                 }
-                {name == "茶道部" &&
-                    <div className="w-full px-[4vw]  lg:px-5 pb-[3vw] lg:pb-14">
-                        <SadouClub></SadouClub>
-                    </div>
-                }
                 {name == "高校軽音楽部" &&
                     <EditKeion></EditKeion>
                 }
@@ -745,8 +782,9 @@ const removeEventTime = (index: number) => {
                     <div className="flex flex-col gap-6 lg:flex-row lg:gap-8 justify-center mt-4 p-4 rounded-xl shadow-lg bg-gradient-to-br from-teal-100 via-sky-200 to-blue-200 bg-opacity-30 backdrop-blur-md">
                       {/* 背景画像 */}
                       <div className="flex flex-col items-center gap-2">
-                        <div className="border-b-2">クラス背景（廊下）</div>
-                        <img src={previmageBackUrl} alt="背景画像" className="md:w-[20vw] sm:max-w-[80vw] rounded-lg shadow-md " />
+                        <div className="border-b-2">背景（顔を載せてはいけません）</div>
+                        <Image src={previmageBackUrl ?? "/NOIMAGE.png"} alt="背景画像" width={800} height={450} className=" rounded-lg shadow-md object-cover w-full sm:max-w-[80vw] md:w-[20vw] h-auto"/>
+
                         <label className="inline-flex items-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-md cursor-pointer hover:bg-cyan-600 transition">
                             画像ファイルを選択
                             <input
@@ -758,14 +796,14 @@ const removeEventTime = (index: number) => {
                         </label>
                         {previewBackUrl && <div>
                             <div className="flex justify-center">変更後</div>
-                            <img src={previewBackUrl} alt="プレビュー" className="md:w-[20vw] sm:w-[80vw] rounded-lg shadow-md" />
+                            <Image src={previewBackUrl ?? "/NOIMAGE.png"} alt="変更後" width={800} height={450} className=" rounded-lg shadow-md object-cover w-full sm:max-w-[80vw] md:w-[20vw] h-auto"/>
                         </div>}
                       </div>
 
                       {/* フロント側の画像 */}
                       <div className="flex flex-col items-center gap-2">
                         <div className="border-b-2">ロンドのクラス写真</div>
-                        <img src={previmageFrontUrl} alt="タイトル画像" className="md:w-[20vw] sm:w-[80vw] rounded-lg shadow-md" />
+                        <Image src={previmageFrontUrl ?? "/NOIMAGE.png"} alt="ロンドのクラス写真" width={800} height={450} className=" rounded-lg shadow-md object-cover w-full sm:max-w-[80vw] md:w-[20vw] h-auto"/>
                         <label className="inline-flex items-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-md cursor-pointer hover:bg-cyan-600 transition">
                             画像ファイルを選択
                             <input
@@ -779,7 +817,7 @@ const removeEventTime = (index: number) => {
                         {previewFrontUrl && 
                         <div>
                             <div className="flex justify-center">変更後</div>
-                            <img src={previewFrontUrl} alt="プレビュー" className="md:w-[20vw] sm:w-[80vw] rounded-lg shadow-md" />
+                            <Image src={previewFrontUrl ?? "/NOIMAGE.png"} alt="変更後" width={800} height={450} className=" rounded-lg shadow-md object-cover w-full sm:max-w-[80vw] md:w-[20vw] h-auto"/>
                         </div>
                         }
                       </div>
