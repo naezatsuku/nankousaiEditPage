@@ -85,7 +85,8 @@ export default function ShowDetails (
     const [date, setDate] = useState(false) ;
 
     useEffect(()=>{
-        handlePrevCustomTag();
+        (async ()=>{
+            handlePrevCustomTag();
         imageUrl(name)
         setEventTitle(event.title);
         setInformationTitle(detail[0].title);
@@ -101,6 +102,8 @@ export default function ShowDetails (
         }else{
             setEventTag(allTags);
         }
+
+        })
         
     },[])
     if(detail.length == 0){
@@ -531,7 +534,7 @@ export default function ShowDetails (
                     <input
                             type="text"
                             placeholder={event.title}
-                            value={eventTitle}
+                            value={eventTitle ?? ""}
                             onChange={(e) => handleEventTitle(e.target.value)}
                             className={`
                               text-[8vw] font-bold leading-[140%] lg:leading-[125%] tracking-tight text-left
@@ -549,7 +552,7 @@ export default function ShowDetails (
                     <p className="flex items-center mb-[1vw] lg:mb-3">
                         <MdOutlinePlace className="translate-y-[5%] mr-[0.5%]"/>
                         <input type="text"
-                            value={eventPlace}
+                            value={eventPlace ?? ""}
                             onChange={(e)=>{handleEventPlace(e.target.value)}}
                             placeholder={event.place}
                             className="
@@ -574,7 +577,7 @@ export default function ShowDetails (
                             <IoTimeOutline className="translate-y-[7%] mr-1" />
                             <input
                               type="text"
-                              value={timeValue}
+                              value={timeValue ?? ""}
                               onChange={(e) => handleEventTimeChange(index, e.target.value)}
                               className="outline-none bg-transparent border-b border-[#00b2b5] focus:border-[#01e1e5] caret-[#01e1e5] opacity-80 hover:opacity-100 transition duration-200"
                             />
@@ -602,7 +605,7 @@ export default function ShowDetails (
                         <div className={`text-[3.5vw] lg:text-2xl tracking-tight text-slate-500 text-center ${kaiseiDecol.className}`}>
                 <input
                   type="text"
-                  value={eventComment}
+                  value={eventComment ?? ""}
                   onChange={(e) => handleEventComment(e.target.value)}
                   placeholder={event.comment}
                   className="
@@ -652,7 +655,7 @@ export default function ShowDetails (
                             <div className="flex shadow-slate-100 shadow-md">
                                 <div className=" w-[2vw] lg:w-4 bg-gradient-to-b from-[#01e1e5] to-[#039fa2]"></div>
                                 <input 
-                                value={informationTitle}
+                                value={informationTitle ?? ""}
                                 type="text"
                                 className={`${kaiseiDecol.className} text-[#00b2b5]text-[7vw] lg:text-4xl lg:ml-6 lg:py-4 ml-[2vw] py-[1vw]bg-gradient-to-b from-[#01e1e5] to-[#009294] font-bold outline-none bg-transparent hover:underline focus:ring-2 focus:ring-[#01e1e5]hover:opacity-100 opacity-80`}
                                 onChange={(e)=>handleInformationTitleChange(e.target.value)}
@@ -660,7 +663,7 @@ export default function ShowDetails (
                                 ></input>
                             </div>
                             <textarea 
-                            value={informationContent}
+                            value={informationContent ?? ""}
                             onChange={(e)=>{handleInformationContentChange(e.target.value)}}
                             placeholder={value.content}
                             className="h-[calc(1.5em*6)] w-[90vw] lg:w-[80%] ml-[2vw] mr-[3vw] my-[3vw]  text-[4vw] lg:ml-4 lg:mr-6 lg:text-2xl lg:my-5  lg:leading-[150%] leading-[160%] text-[#00b2b5] font-light tracking-[-0.01rem] opacity-80 text-justify resize-none outline-none bg-transparent placeholder-[#00b2b5] hover:opacity-100 transition duration-150 ">
@@ -763,7 +766,7 @@ export default function ShowDetails (
                       <input
                         
                         type="text"
-                        value={newTagName}
+                        value={newTagName ?? ""}
                         onChange={(e) => setNewTagName(e.target.value)}
                         onKeyDown={(e)=>e.key === "Enter" && handleAddCustomTag()}
                         placeholder="新しいタグ名"
