@@ -90,6 +90,8 @@ const UsersTable = () => {
         return 'bg-blue-50'
       case 'viewer':
         return 'bg-gray-50'
+      case 'timer':
+        return 'bg-green-50' 
       default:
         return ''
     }
@@ -152,8 +154,11 @@ const UsersTable = () => {
                     disabled={updatingIds.includes(user.user_id)}
                     className="w-full border rounded px-2 py-1 text-center"
                   >
-                    <option value="editor">editor</option>
+                    
+                    
                     <option value="viewer">viewer</option>
+                    <option value="timer">timer</option>
+                    <option value="editor">editor</option>
                     <option value="band">band</option>
                   </select>:
                   <div className='w-full text-center'>admin:変更不可</div>

@@ -102,9 +102,7 @@ export default function Keion() {
                         <motion.div className="w-[95%] mx-auto mb-1.5 opacity-85 rounded-lg border-2 border-slate-100 overflow-hidden" animate={num == index + 1 ? "open": "close"} variants={variants}>   
                             <div className="mx-4">
                                 <div className="flex justify-center items-center italic text-gray-800 text-[6vw] lg:text-4xl pt-[1.5vw] pb-[2vw] pr-[5%] lg:pt-4 lg:pb-5">
-                                    <div className={`text-[3vw] font-medium tracking-tight bg-gradient-to-br from-fuchsia-500  to-sky-400  text-white px-[3vw] py-[0.2vw] rounded-full  inline-block  text-left  my-[0.7vw] translate-y-[0%]     lg:text-md lg:px-8 lg:py-[2px] `}>
-                                        バンド          
-                                    </div>
+                                    
                                     <div>{value.name}</div>
                                 </div>
                             </div>

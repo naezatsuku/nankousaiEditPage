@@ -1,6 +1,5 @@
 "use client"
 import ExplanationRequestEdit from '@/app/components/auth/ExplanationRequestEdit'
-import UserProfileCard from '@/components/UserProfileCard'
 import { supabase } from '@/lib/supabaseClient'
 import { UUID } from 'crypto'
 import { useRouter } from 'next/navigation'
@@ -22,7 +21,7 @@ const EditRequest = () => {
     const [requestClass,setRequestClass] = useState<string>("");
     const [classNames,setClassNames] =  useState<string[]>()
     const router = useRouter();
-    let compare = (a:any,b:any) => {
+    let compare = (a:string,b:string) => {
         if(a > b) {
             return 1;
         } else {

@@ -210,6 +210,7 @@ const ChangeAdminTable: React.FC = () => {
                 <option value="admin">admin</option>
                 <option value="editor">editor</option>
                 <option value="viewer">viewer</option>
+                <option value="timer">timer（待ち時間のみ更新）</option>
                 <option value="band">band（高校軽音楽部）</option>
               </select>
             </div>
