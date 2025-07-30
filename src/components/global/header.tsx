@@ -96,7 +96,8 @@ export default function Header() {
         {link:"/viewer", name:"展示一覧"},
         {link:"/admin", name:"管理者"},
         {link:"/auth/profile", name:"アカウント情報"},
-        {link:"/auth/editRequest",name:"編集の申請"}
+        {link:"/auth/editRequest",name:"編集の申請"},
+        {link:"/https://nankousai-control-time.vercel.app",name:"待ち時間の更新(別サイト)"}
     ]
 
     const links_pc = [
@@ -104,7 +105,8 @@ export default function Header() {
         {link:"/viewer", name:"展示一覧"},
         {link:"/admin", name:"管理者"},
         {link:"/auth/profile", name:"アカウント情報"},
-        {link:"/auth/editRequest",name:"編集の申請"}
+        {link:"/auth/editRequest",name:"編集の申請"},
+        {link:"/https://nankousai-control-time.vercel.app",name:"待ち時間の更新(別サイト)"}
     ]
 
     const link_pc_mini = [
@@ -112,7 +114,8 @@ export default function Header() {
         {link:"/viewer", name:"展示一覧"},
         {link:"/admin", name:"管理者"},
         {link:"/auth/profile", name:"アカウント情報"},
-        {link:"/auth/editRequest",name:"編集の申請"}
+        {link:"/auth/editRequest",name:"編集の申請"},
+        {link:"/https://nankousai-control-time.vercel.app",name:"待ち時間の更新(別サイト)"}
     ]
 
     const pullDownMenu = () => {
