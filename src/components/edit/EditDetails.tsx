@@ -65,6 +65,7 @@ export default function ShowDetails (
         {id:"rest", name:"休憩", color:"from-cyan-500 to-yellow-300"},
         {id:"other", name:"その他", color:"from-sky-600 to-sky-200"},
     ]
+    const [err,setErr] = useState<boolean>(false)
     const [imageBackFile, setImageBackFile] = useState<File | null>(null);
     const [imageFrontFile, setImageFrontFile] = useState<File | null>(null);
     const [previmageBackUrl,setPrevimageBackUrl] = useState<string | undefined>(undefined)
@@ -85,7 +86,7 @@ export default function ShowDetails (
     const [date, setDate] = useState(false) ;
 
     useEffect(()=>{
-        (async ()=>{
+        try{
             handlePrevCustomTag();
         imageUrl(name)
         setEventTitle(event.title);
@@ -103,7 +104,11 @@ export default function ShowDetails (
             setEventTag(allTags);
         }
 
-        })
+        }catch(e){
+            setErr(true)
+        }
+        
+        
         
     },[])
     if(detail.length == 0){
@@ -253,6 +258,7 @@ export default function ShowDetails (
     if(customTagName.length==0){
         return
     }
+    console.log(customTagName)
     const customTag = {
         id: "custom", 
         name: customTagName[0],
@@ -508,8 +514,13 @@ export default function ShowDetails (
 
         return result
     }
- 
+    if(err){
+        return (
+            <div>introductionページが存在していません。管理者に問い合わせてください。</div>
+        )
+    }
     return(
+         
         <div className="mt-[min(15vw,80px)]  md:mt-[13vw]  lg:mt-[min(15vw,80px)] bg-white min-h-screen z-0 ">
             <div className="w-full h-[35vw] lg:h-60 relative">
                 <div className=" z-0 inset-0 absolute">
@@ -863,6 +874,7 @@ export default function ShowDetails (
                 </div>
             </div> 
         </div>
+            
     )
 }
 
