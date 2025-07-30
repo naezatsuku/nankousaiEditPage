@@ -1,34 +1,42 @@
-"use client"
+'use client'
+import { useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
-import React from 'react'
 
-export default function page(){
-  const handleLogin = async ()=>{
-    const redirectUrl = window.location.origin
-    await supabase.auth.signInWithOAuth({"provider":"google",options:{redirectTo:`${redirectUrl}/auth/callback`}})
-  }
-  const checkSession=async()=>{
-    const {data:session,error:err} = await supabase.auth.getSession(); 
-    console.log("session",session,"error",err)
+export default function AuthPage() {
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('')
 
+  const handleSendLink = async () => {
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`
+      }
+    })
+    if (error) {
+      setMessage('メール送信に失敗しました。再度お試しください。')
+    } else {
+      setMessage('メールを送信しました。受信箱をご確認ください。')
+    }
   }
-   return (
+
+  return (
     <main className="flex flex-col items-center justify-center min-h-screen">
-      <h1 className="text-2xl font-bold mb-6">ログイン</h1>
+      <h1 className="text-2xl mb-6">メールでログイン</h1>
+      <input
+        type="email"
+        placeholder="your@example.com"
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+        className="border px-3 py-2 mb-4 w-64"
+      />
       <button
-        onClick={handleLogin}
-        className="bg-blue-600 text-white px-4 py-2 rounded mb-4 shadow"
+        onClick={handleSendLink}
+        className="bg-blue-600 text-white px-4 py-2 rounded"
       >
-        Googleでログイン
+        リンクを送信
       </button>
-      <button
-        onClick={checkSession}
-        className="bg-gray-200 text-black px-4 py-2 rounded shadow"
-      >
-        セッション確認
-      </button>
+      {message && <p className="mt-4 text-gray-700">{message}</p>}
     </main>
   )
-
 }
-

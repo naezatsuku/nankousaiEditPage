@@ -92,6 +92,8 @@ export default function Header() {
     }
 
     const links = [
+        {link:"/login", name:"ログイン"},
+        {link:"/logout", name:"ログアウト"},
         {link:"/", name:"トップ"}, 
         {link:"/viewer", name:"展示一覧"},
         {link:"/admin", name:"管理者"},
@@ -101,6 +103,8 @@ export default function Header() {
     ]
 
     const links_pc = [
+        {link:"/login", name:"ログイン"},
+        {link:"/logout", name:"ログアウト"},
         {link:"/", name:"トップ"},
         {link:"/viewer", name:"展示一覧"},
         {link:"/admin", name:"管理者"},
@@ -110,6 +114,8 @@ export default function Header() {
     ]
 
     const link_pc_mini = [
+        {link:"/login", name:"ログイン"},
+        {link:"/logout", name:"ログアウト"},
         {link:"/", name:"トップ"},
         {link:"/viewer", name:"展示一覧"},
         {link:"/admin", name:"管理者"},
