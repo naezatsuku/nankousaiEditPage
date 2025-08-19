@@ -17,7 +17,7 @@ const ExplanationChangeEditors: React.FC = () => {
           open ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <p className="text-sm text-gray-600 ">
+        <p className="text-sm text-gray-900 ">
           ここでは生徒の権限を変更できます。<br></br>
           生徒削除は別のページです。<br />
           待ち時間編集権限リクエストを送った人のみ表示されます。<br />

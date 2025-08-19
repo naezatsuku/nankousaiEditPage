@@ -17,14 +17,16 @@ const ExplanationChangeEditors: React.FC = () => {
           open ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <p className="text-sm text-gray-600 ">
+        <p className="text-sm text-gray-900 ">
           ここでは各展示を編集した時の担任への通知メールの変更ができます<br></br>
           すべての展示が表示されます<br />
-          ※スマホだと一覧のみ閲覧可能です。<br />
+          ※パソコンのみ閲覧可能です。<br />
           <span className=' text-black'>操作方法</span><br />
           メールアドレスをクリックしてメールアドレスの変更を行う<br />
           ※<span className='text-red-500'>「固定」</span>をクリックすると、メールアドレスの変更の申請を拒否します。<br />
-          展示の部の期間中など、メールアドレスを変更させたくないときに活用してください。
+          展示の部の期間中など、メールアドレスを変更させたくないときに活用してください。<br />
+          <span className="text-green-700 font-bold">緑色</span>...更新の申請があるクラス<br />
+          <span className="text-red-700 font-bold">赤色</span>...更新を拒否している状態
         </p>
       </div>
     </div>

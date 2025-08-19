@@ -17,7 +17,7 @@ const ExplanationEditAdmin: React.FC = () => {
           open ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <p className="text-sm text-gray-600 ">
+        <p className="text-sm text-gray-900 ">
           ここでは生徒の権限を管理者に変更できます。<br></br>
           ほかのページでは管理者に変更はできません<br />
           ※自分の役職も変更可能です<br />

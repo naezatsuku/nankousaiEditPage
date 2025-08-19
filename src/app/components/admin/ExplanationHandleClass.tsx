@@ -18,7 +18,7 @@ const ExplanationHandleClass: React.FC = () => {
           open ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <p className="text-sm text-gray-600 ">
+        <p className="text-sm text-gray-900 ">
           ここでは展示の出店状況を管理できます<br></br>
           展示を削除したり追加したりするのが可能です<br />
           <span className=' text-black'>説明</span><br />

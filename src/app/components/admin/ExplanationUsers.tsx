@@ -17,7 +17,7 @@ const ExplanationUsers: React.FC = () => {
           open ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <p className="text-sm text-gray-600 ">
+        <p className="text-sm text-gray-900 ">
           ここでは生徒一覧の閲覧・生徒の削除ができます。編集リクエストした人のみの変更は別ページです。<br></br>
           ※スマホだと一覧のみ閲覧可能です。<br />
           赤色は管理者権限有り。青色は編集者権限有り。緑色は待ち時間更新のみ編集権限有り
