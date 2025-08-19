@@ -66,7 +66,6 @@ const HandleClass: React.FC = () => {
       (foodData as { className: string }[] || []).map((f) => f.className)
     )
 
-    // マージ＆ソート
     const merged: Row[] = contents.map((c) => ({
       ...c,
       hasIntro: introSet.has(c.className),

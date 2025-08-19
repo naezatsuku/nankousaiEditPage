@@ -21,10 +21,15 @@ type eventData = { event:{
     imageBackURL: string,
     imageURL: string, 
     imageVersion:string }, 
-    detail:Array<{ title:string, content:string }> }
-
+    detail:Array<{ title:string, content:string,teacherEmail:string }> }
+type userData = {
+  email:string,//userDataに送る先（担任の人のメールアドレスを用意）
+  name:string,
+  class_id:string,
+}
 export default function PageInner() {
-  const [data, setData] = useState<eventData>()
+  const [data, setData] = useState<eventData>();
+  const [userData,setUserData] = useState<userData>()
   const params = useSearchParams()
   const name = params.get("name") ?? ""
   const router = useRouter()
@@ -53,11 +58,19 @@ export default function PageInner() {
             .select('*')
             .eq('user_id', user.id)
             .single()
-          if (error || !profile?.name || !profile?.class_id) {
+          if (error || !profile?.name || !profile?.class_id ||!profile?.email) {
             console.log('プロフィール未登録または不完全', error)
+            //console.log(profile.name,profile.email,profile.class_id)
             router.push('/auth/profile') 
             return
           }
+
+          const userData = {
+            name:profile.name,
+            email:profile.email,
+            class_id:profile.class_id
+          }
+          setUserData(userData);
           if(profile.role == "admin"){
             return console.log("adminなのでどのクラスも編集可")
           }else if(profile.role == "editor" || profile.role == "band"){
@@ -83,9 +96,9 @@ export default function PageInner() {
   },[data,router])
   if (!name) return <NotFound text="クラスページにもとる" link="/viewer/introduction" />
 
-  return data ? (
+  return (data && userData) ? (
     <>
-      <EditDetails event={data.event} detail={data.detail} name={name} />
+      <EditDetails event={data.event} detail={data.detail} name={name} userData={userData} />
       <BackTo link={`/viewer/introduction?name=${name}`} name={name} />
     </>
   ) : (

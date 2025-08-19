@@ -22,7 +22,7 @@ export async function getEditEventDetails(name:string) {
 
      //console.log(newContent)
 
-    const {data:detail} = await supabase.from('introduction').select(`title, content`).eq("className", name)
+    const {data:detail} = await supabase.from('introduction').select(`title, content,teacherEmail`).eq("className", name)
     
     let details:any = []
 

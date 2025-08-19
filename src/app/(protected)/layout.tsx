@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react'
 
 const ProtectedLayout = ({children}:{children:React.ReactNode}) => {
-     const {session , loading} = useSession();
+    const {session , loading} = useSession();
     const router = useRouter();
     useEffect(()=>{
         if(!session && !loading){

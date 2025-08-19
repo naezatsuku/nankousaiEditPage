@@ -18,8 +18,16 @@ import EditFood from "./edit_foods";
 import EditKeion from "./edit_Keion";
 import { v4 as uuidv4 } from "uuid";
 import imageCompression from "browser-image-compression";
+import { useSession } from "@/hooks/useSession";
+import { useRouter } from "next/router";
+import Link from "next/link";
 const kaiseiDecol = KaiseiDecol
 
+type userData = {
+  email:string,//生徒の
+  name:string,
+  class_id:string,
+}
 type eventData = {
     event:{
         id:number,
@@ -39,19 +47,25 @@ type eventData = {
     },
     detail:Array<{
         title:string,
-        content:string
+        content:string,
+        teacherEmail:string
     }>,
     name:string
+    userData:userData
 }
 
 type detail = Array<{
     title:string,
-    content:string
+    content:string,
+    teacherEmail:string
 }>
 
 export default function ShowDetails (
-    {event, detail, name}:eventData
+    {event, detail, name , userData}:eventData,
 ) { 
+    
+
+
     const MAX_SIZE = 1 * 1024 * 1024  // 1MB 上限
 
     const baseTagList=[
@@ -84,7 +98,9 @@ export default function ShowDetails (
     const [newTagName, setNewTagName] = useState("");
     const [canBeChoosenTag, setCanBeChoosenTag] = useState(baseTagList);
     const [date, setDate] = useState(false) ;
-
+    //モーダル用
+    const [isOpen, setIsOpen] = useState(false);
+    const [email,setEmail] = useState<string>("");
     useEffect(()=>{
         try{
             handlePrevCustomTag();
@@ -107,9 +123,6 @@ export default function ShowDetails (
         }catch(e){
             setErr(true)
         }
-        
-        
-        
     },[])
     if(detail.length == 0){
         return (
@@ -345,6 +358,20 @@ export default function ShowDetails (
     
     //データベースで更新する。
     const upDateData = async ()=>{
+         if(!newDetails[0].teacherEmail || newDetails[0].teacherEmail == "" ){
+            if(confirm("先生への更新先メールアドレスが指定されていません。それでも更新しますか？")){
+                
+            }else{
+                return alert("更新を中止しました")
+            }
+        }else{
+            if(confirm("更新を行うと先生への通知が行きます。それでも更新しますか？")){
+
+            }else{
+                return alert("更新が中止されました");
+            }
+        }
+        console.log("email",newDetails[0].teacherEmail)
         const targetClass = name;
         const detailDatas ={
             title:informationTitle,
@@ -362,6 +389,7 @@ export default function ShowDetails (
         const {data:informationData,error:informationError} = await supabase.from("introduction").update(detailDatas).eq("className",targetClass).select();
         const {data:eventData,error:eventError} = await supabase.from("contents").update(eventDatas).eq("className",targetClass).select();
         console.log(eventData,eventError);
+        handleEmail();
         let  message ="";
         if(informationError){
             message = message+"informationErrorです"
@@ -375,9 +403,25 @@ export default function ShowDetails (
             window.alert(message);
         }
         console.log(informationData,eventData)
-        window.location.reload();
+        //window.location.reload();
     }
 
+    //モーダルで先生のメールアドレス変更用
+    const handleSetMail = async ()=>{
+        const mail = email;
+        if(mail == "" ){
+            return alert("先生へのメールを入力してください");
+        }
+        const {data,error} = await supabase.from("introduction").update({teacherEmail:mail}).eq("className",event.className).select()
+        if(error){
+            console.log(error);
+            return alert("更新に失敗しました");
+        }else{
+            console.log(data);
+
+            return alert("成功しました!");
+        }
+    }
     
     console.log(event);
     const onMenuClicked = () => {
@@ -513,6 +557,42 @@ export default function ShowDetails (
 
 
         return result
+    }
+    //編集した時のメール送信システム
+    const handleEmail = async () =>{
+        if(!userData){
+            return alert("ログイン情報がありませんでした")
+        }
+        if(!newDetails[0].teacherEmail || newDetails[0].teacherEmail == ""){
+            alert("メールアドレス未指定")
+        }
+        try{
+            const teachermail = newDetails[0].teacherEmail
+            const date = new Date();
+            const now = date.toLocaleString();
+            const url = `https://nankousai.vercel.app/event/introduction?name=${name}`
+            const url1 = `https://nankousai-edit-page.vercel.app/viewer/introduction?name=${name}`
+            const res = await fetch("/api/sendMail/",{
+                method:"POST",
+                headers:{
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  to: teachermail,
+                  subject: `${event.className} データの更新報告確認してください`,
+                  userData:userData,
+                  now:now,
+                  url:url,
+                  url1:url1
+                }),
+
+            })
+            //const result = await res.json()
+            //console.log(result);
+            alert("正常にメールを送信できました")
+        }catch(error){
+            return alert(`更新通知のメールの送信に失敗しました。メールアドレスが正しいか確認してください:${error}`)
+        }
     }
     if(err){
         return (
@@ -680,6 +760,9 @@ export default function ShowDetails (
                             className="h-[calc(1.5em*6)] w-[90vw] lg:w-[80%] ml-[2vw] mr-[3vw] my-[3vw]  text-[4vw] lg:ml-4 lg:mr-6 lg:text-2xl lg:my-5  lg:leading-[150%] leading-[160%] text-[#00b2b5] font-light tracking-[-0.01rem] opacity-80 text-justify resize-none outline-none bg-transparent placeholder-[#00b2b5] hover:opacity-100 transition duration-150 ">
 
                             </textarea>
+                            <div>
+                                {value.teacherEmail}
+                            </div>
                         </div>
                     ))}
                     <table className="w-full table-auto border-collapse text-[#00b2b5] text-sm lg:text-base">
@@ -851,9 +934,23 @@ export default function ShowDetails (
                         <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
                         onClick={upDateData}>
                         <FaSave className="w-5 h-5" />保存する
-                    </button>
+                        </button>
                     </div>
-                    
+                    <div className="flex justify-center mt-4">
+                      <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-sm text-center">
+                        <h2 className="text-lg font-semibold mb-2">更新通知のメールアドレス</h2>
+                        <p className="text-gray-700 mb-4">{newDetails[0].teacherEmail}</p>
+                        <Link
+                          href={{pathname:"/viewer/edit/editEmail",query:{name:event.className}}}
+                          className="bg-blue-600 text-white rounded-md hover:bg-blue-700 transition  py-2 px-4  duration-300"
+                        >
+                          通知先のメールアドレスを変更する
+                        </Link>
+                      </div>
+                        
+
+                    </div>
+
                     </div>
                 </div>
                 : <div className="py-[15vw] my-[5vw] rounded-lg bg-slate-50 mx-[4vw] lg:mx-6 lg:py-16 lg:my-0">

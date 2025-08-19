@@ -76,6 +76,18 @@ const Page = () => {
           
         </div>
         <div className="group bg-gray-100 hover:bg-gray-200 rounded-xl shadow px-6 py-5 text-center transition-all duration-300 overflow-hidden w-full max-w-xl">
+          <Link href={{pathname:"/admin/changeEmail"}}>
+          <p className="text-lg font-semibold text-gray-800">通知メールアドレスの変更</p>
+
+          <div className="mt-2 max-h-0 group-hover:max-h-32 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out overflow-hidden">
+            <p className="text-sm text-gray-600">
+              各展示を編集した時に、先生へ通知が行きます。そのときの先生のメールアドレスを変更できます
+            </p>
+          </div>
+          </Link>  
+          
+        </div>
+        <div className="group bg-gray-100 hover:bg-gray-200 rounded-xl shadow px-6 py-5 text-center transition-all duration-300 overflow-hidden w-full max-w-xl">
           <Link href={{pathname:"/admin/changeAdmin"}}>
           <p className="text-lg font-semibold text-gray-800">管理者の変更</p>
 
