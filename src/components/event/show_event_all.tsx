@@ -80,7 +80,7 @@ export default function ShowEvent(
         {id:"j-3", name:"中学3年", color:"from-sky-400 via-blue-400 to-indigo-400"},
         {id:"h-1", name:"高校1年", color:"from-yellow-300 to-amber-400"},
         {id:"h-2", name:"高校2年", color:"from-pink-300 via-rose-400 to-red-400"},
-        {id:"h-3", name:"高校3年", color:"from-sky-400 via-blue-400 to-indigo-400" },
+        {id:"h-3", name:"高校3年", color:"from-pink-300 via-rose-400 to-red-400" },
         {id:"other", name:"その他", color:"from-sky-600 to-sky-200"},
         {id:"unclassifiedJ", name:"ジャンル未指定", color:"from-gray-400 to-gray-200"},
         {id:"unclassifiedT", name:"タイプ未指定", color:"from-gray-400 to-white-200 "}
