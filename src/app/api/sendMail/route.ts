@@ -1,3 +1,4 @@
+export const runtime = 'nodejs'; // ← これが超重要
 import { NextResponse } from 'next/server';
 
 import nodemailer from "nodemailer"
