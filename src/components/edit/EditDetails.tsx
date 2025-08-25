@@ -4,7 +4,7 @@ import Image from "next/image"
 import { MdOutlinePlace } from "react-icons/md";
 import { IoTimeOutline } from "react-icons/io5";
 import NotReady from "../global/parts/notReady";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { KaiseiDecol } from "@/fonts";
 import { HowToPay } from "@/components/introduction/atentions"
@@ -101,6 +101,8 @@ export default function ShowDetails (
     //モーダル用
     const [isOpen, setIsOpen] = useState(false);
     const [email,setEmail] = useState<string>("");
+    //追加しました
+    const baseTagIds = useMemo(() => baseTagList.map(tag => tag.id), [baseTagList]);
     useEffect(()=>{
         try{
             handlePrevCustomTag();
@@ -124,6 +126,8 @@ export default function ShowDetails (
             setErr(true)
         }
     },[])
+
+
     if(detail.length == 0){
         return (
             <>
@@ -240,23 +244,46 @@ export default function ShowDetails (
     //生徒が決められるtag編集できる
     
     console.log()
-
     const handleAddCustomTag = () => {
       if (!newTagName.trim()) return;
 
-      const customTag = {
-        id: "custom", 
-        name: newTagName.trim(),
-        color: "from-purple-400 to-purple-600", 
-      };
-
-      setCanBeChoosenTag((prev) => {
-        const filtered = prev.filter(tag => tag.id !== "custom");
-        return [...filtered, customTag];
-      });
-
-      setNewTagName("");
+    const customTag = {
+      id: "custom",
+      name: newTagName.trim(),
+      color: "from-purple-400 to-purple-600",
     };
+
+    // baseTagList の ID を抽出
+    const baseTagIds = baseTagList.map(tag => tag.id);
+    
+    // canBeChoosenTag に custom を追加（重複排除）
+    setCanBeChoosenTag(prev => {
+      const filtered = prev.filter(tag => tag.id !== "custom");
+      return [...filtered, customTag];
+        });
+      
+        // eventTag
+        setEventTag(prev => {
+          const baseTagIds = baseTagList.map(tag => tag.id);
+                
+          // すでに customTag.id が含まれていたら追加しない
+          const alreadyIncluded = prev.includes(customTag.id);
+          const newTags = alreadyIncluded ? prev : [...prev, customTag.name];
+                
+          const unknownTags = newTags.filter(tag => !baseTagIds.includes(tag));
+        console.log("a",alreadyIncluded)
+          if (unknownTags.length >= 2) {
+            const lastUnknown = unknownTags[unknownTags.length - 1];
+            const validTags = newTags.filter(tag => baseTagIds.includes(tag));
+            console.log(lastUnknown)
+            return [...validTags, lastUnknown];
+          }
+        console.log(newTags)
+          return prev
+        });
+
+                setNewTagName("");
+            };
 
 
 
@@ -313,9 +340,28 @@ export default function ShowDetails (
         const update = [newContent];
         setEventTime(update);
     }
-    const handleEventTag = (name:string)=>{
-        setEventTag(prev=>prev.includes(name) ? prev.filter(t => t!=name) : [...prev,name])
-    }
+    const handleEventTag = (name: string) => {
+      const baseTagIds = baseTagList.map(tag => tag.id);
+
+      setEventTag(prev => {
+        const isAlreadySelected = prev.includes(name);
+
+        // トグル処理
+        let updated = isAlreadySelected
+          ? prev.filter(t => t !== name)
+          : [...prev, name];
+
+        const unknownTags = updated.filter(tag => !baseTagIds.includes(tag));
+
+        // 未定義タグが2つ以上ある場合、最新の1つだけ残す
+        if (unknownTags.length > 1) {
+          const lastUnknown = unknownTags[unknownTags.length - 1];
+          updated = updated.filter(tag => baseTagIds.includes(tag)).concat(lastUnknown);
+        }
+
+        return updated;
+      });
+    };
     const handleEventTypeTag = (name:string)=>{
         setEventTypeTag(name);
     }
@@ -358,12 +404,10 @@ export default function ShowDetails (
     
     //データベースで更新する。
     const upDateData = async ()=>{
+        console.log(newDetails[0].teacherEmail)
          if(!newDetails[0].teacherEmail || newDetails[0].teacherEmail == "" ){
-            if(confirm("先生への更新先メールアドレスが指定されていません。それでも更新しますか？")){
-                
-            }else{
-                return alert("更新を中止しました")
-            }
+            alert("先生へのメールアドレスを設定してください。設定しないと更新できません")
+            return 
         }else{
             if(confirm("更新を行うと先生への通知が行きます。それでも更新しますか？")){
 
@@ -405,34 +449,6 @@ export default function ShowDetails (
         console.log(informationData,eventData)
         //window.location.reload();
     }
-
-    //モーダルで先生のメールアドレス変更用
-    const handleSetMail = async ()=>{
-        const mail = email;
-        if(mail == "" ){
-            return alert("先生へのメールを入力してください");
-        }
-        const {data,error} = await supabase.from("introduction").update({teacherEmail:mail}).eq("className",event.className).select()
-        if(error){
-            console.log(error);
-            return alert("更新に失敗しました");
-        }else{
-            console.log(data);
-
-            return alert("成功しました!");
-        }
-    }
-    
-    console.log(event);
-    const onMenuClicked = () => {
-        if(date == false) {
-            setDate(true)
-        } else {
-            setDate(false)
-        }
-    }
-
-
 
     const variants = {
         hidden:{
