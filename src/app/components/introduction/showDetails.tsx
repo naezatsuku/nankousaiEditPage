@@ -103,17 +103,7 @@ export default function ShowDetails (
         {name:"高校3年5組"}
 
     ]
-    let img_tag = null
-    //nameはクラス名
-    if(!foodClass.some(n=>n.name == name)){
-        img_tag = event.img;
-    }else{
-        if(event.type == "フード") {
-            img_tag = "/burger-2762431_1920.jpg"
-        } else {
-            img_tag = "/AdobeStock_335757173.jpeg"
-        }
-    }
+    let img_tag = event.img;
 
     const newDetails:detail = []
 
