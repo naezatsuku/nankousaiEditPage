@@ -98,8 +98,11 @@ const ChangeEmail = () => {
   return (
     <div className="max-w-9xl mx-auto p-6">
       <h2 className={`text-2xl font-bold mb-4 text-center `}>先生への通知メールを変更</h2>
-      <button
-      onClick={()=>updateRow()}>click</button>
+      <div className='flex justify-center my-2 text-center'>
+        <button onClick={()=>updateRow()}
+          className='py-2 px-4 bg-red-300 text-center rounded-2xl transition hover:scale-105 duration-300 hover:opacity-80'
+          >更新する</button>
+      </div>
       <table className="w-full table-fixed border-collapse text-sm divide-y-2 divide-gray-700">
         <thead className="bg-gray-100">
           <tr className="divide-x divide-gray-300">
