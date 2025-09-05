@@ -644,14 +644,10 @@ export default function ShowDetails (
                             value={eventTitle ?? ""}
                             onChange={(e) => handleEventTitle(e.target.value)}
                             className={`
-                              text-[8vw] font-bold leading-[140%] lg:leading-[125%] tracking-tight text-left
+                              max-w-screen text-[8vw] font-bold leading-[140%] lg:leading-[125%] tracking-tight text-left
                               ${kaiseiDecol.className}
                               ${setTextColor(event.tags, "inputText")} lg:text-7xl
-                              hover:underline hover:opacity-100 opacity-80
-                              border-b border-[#00b2b5] focus:border-[#01e1e5]
-                              outline-none bg-transparent
-                              transition duration-200
-                                            `}
+                              hover:underline hover:opacity-100 opacity-80 border-b border-[#00b2b5] focus:border-[#01e1e5] outline-none bg-transparent transition duration-200`}
                     />
                   </div>
                 </div>

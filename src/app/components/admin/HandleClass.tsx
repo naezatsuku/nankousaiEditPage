@@ -5,7 +5,8 @@ import { supabase } from '@/lib/supabaseClient'
 type Content = {
   id: number
   className: string
-  type: string
+  type: string,
+  TimeVisible:boolean
 }
 
 type Row = Content & { hasIntro: boolean; hasFood: boolean }
@@ -40,7 +41,7 @@ const HandleClass: React.FC = () => {
     // contents
     const { data: contentsData, error: cError } = await supabase
       .from('contents')
-      .select('id, className, type')
+      .select('id, className, type,TimeVisible')
     if (cError) {
       console.error(cError)
       
@@ -110,6 +111,7 @@ const HandleClass: React.FC = () => {
       type: newType,
       hasIntro: false,
       hasFood: false,
+      TimeVisible:false
     }
     setRows((prev) =>
       [...prev, newRow].sort((a, b) => a.className.localeCompare(b.className))
@@ -173,15 +175,23 @@ const HandleClass: React.FC = () => {
     }
     setRows((prev) => prev.filter((r) => r.id !== id))
   }
-
+  //待ち時間表示非表示
+  const handleTimeVisible = async (id:number,state:boolean) => {
+       const { error } = await supabase.from('contents').update({TimeVisible:state}).eq('id', id)
+    setRows((prev) => 
+      prev.map((r)=>{
+        return r.id ==id ? {...r,TimeVisible:state} :r
+      })
+    )
+  }
   if (loading) return <div>Loading…</div>
   if (err) return <div className="text-red-600">{err}</div>
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-3xl mx-auto px-2">
       <form
         onSubmit={handleAddContent}
-        className="flex items-end space-x-4 bg-gray-50 p-4 rounded"
+        className="lg:flex items-end space-x-4 bg-gray-50 p-4 rounded"
       >
         <div>
           <label className="block mb-1 text-sm">クラス名</label>
@@ -210,30 +220,29 @@ const HandleClass: React.FC = () => {
 
         <button
           type="submit"
-          className="px-4 py-2 bg-indigo-600 text-white rounded"
+          className="mt-2 lg:mt-0 px-4 py-2 bg-indigo-600 text-white rounded"
         >
-          Add New Class
+          クラスを追加
         </button>
       </form>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto h-screen">
         <table className="table-fixed w-full border-collapse text-sm">
           <thead className="bg-gray-100">
             <tr className="divide-x divide-gray-300">
-              <th className="p-2 text-center">ID</th>
-              <th className="p-3 text-center">クラス名</th>
-              <th className="p-3 text-center">タイプ</th>
-              <th className="p-2 text-center">Introduction</th>
-              <th className="p-2 text-center">Food</th>
-              <th className="p-3 text-center">アクション</th>
+              <th className="p-3 text-center">クラス</th>
+              <th className="p-3 text-center hidden lg:block">タイプ</th>
+              <th className="p-2 text-center">詳細ページ</th>
+              <th className="p-2 text-center">フードメニュー</th>
+              <th className="p-3 text-center">削除</th>
+              <th className="p-3 text-center">待ち時間</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {rows.map((r) => (
               <tr key={r.id} className="divide-x divide-gray-300">
-                <td className="p-2 text-center">{r.id}</td>
                 <td className="p-3 text-center">{r.className}</td>
-                <td className="p-3 text-center">{r.type}</td>
+                <td className="p-3 text-center hidden lg:block">{r.type}</td>
                 <td
                   className={`p-2 text-center rounded-sm ${
                     r.hasIntro
@@ -270,13 +279,26 @@ const HandleClass: React.FC = () => {
                     </button>
                   )}
                 </td>
-                <td className="p-3 text-center space-x-2">
+                <td className="p-3 flex- text-center space-x-2">
                   <button
                     onClick={() => handleDelete(r.id)}
                     className="px-3 py-1 bg-red-500 text-white rounded"
                   >
-                    Delete
+                    削除
                   </button>
+                  
+                </td>
+                <td className="p-3 flex- text-center space-x-2">
+                  <div className='flex justify-center'>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" 
+                      checked={r.TimeVisible} 
+                      onChange={(e)=>handleTimeVisible(r.id,e.target.checked)}
+                      className="sr-only peer" />
+                      <div className="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-green-400 transition-colors"></div>
+                      <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
+                  </label>
+                  </div>
                 </td>
               </tr>
             ))}
