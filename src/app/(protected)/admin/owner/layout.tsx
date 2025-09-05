@@ -26,16 +26,19 @@ const AdminLayout = ({children}:{children:React.ReactNode}) => {
         if(user){
           const profile = await handleUserProfiles(user.id);
           console.log(profile);
-          const role = profile.role;
-          if(role != "admin"){
-            window.alert("あなたは管理者ではありません。");
+          try{
+            const role = profile.role;
+            const additionalRoles:string[] = [...profile.additionalRole];
             
-            return router.push("/");
-          }else{
-            console.log("管理者");
-            setRole(role);
+            if( role == "admin" && additionalRoles.includes("owner")){
+               setRole("owner");
+            }
+          }catch(e){
+            alert("ownerではありません")
+            return router.push("/admin")
           }
-        }
+          
+        }   
       }
         
         handleAuth();
@@ -47,7 +50,7 @@ const AdminLayout = ({children}:{children:React.ReactNode}) => {
       <div>
         {role === undefined ? (
           <Loading />
-        ) : role === "admin" ? (
+        ) : role === "owner" ? (
           <div>{children}</div>
         ) : null}
       </div>
